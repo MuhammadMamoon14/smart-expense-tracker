@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Smart Expense Tracker — Sign In</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg:        #070b14;
+    --surface:   #0d1525;
+    --surface2:  #111d35;
+    --border:    #1e2f50;
+    --accent:    #3b82f6;
+    --accent2:   #06b6d4;
+    --success:   #10b981;
+    --danger:    #ef4444;
+    --text:      #e2e8f0;
+    --muted:     #64748b;
+    --card-glow: 0 0 60px rgba(59,130,246,.12);
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'DM Sans',sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  /* Animated background blobs */
+  .bg-blob{
+    position:fixed;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.18;
+    animation:drift 14s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  .bg-blob.b1{width:500px;height:500px;background:radial-gradient(circle,#3b82f6,transparent);top:-100px;left:-150px;animation-delay:0s}
+  .bg-blob.b2{width:400px;height:400px;background:radial-gradient(circle,#06b6d4,transparent);bottom:-80px;right:-100px;animation-delay:-5s}
+  .bg-blob.b3{width:300px;height:300px;background:radial-gradient(circle,#8b5cf6,transparent);top:40%;left:60%;animation-delay:-9s}
+  @keyframes drift{from{transform:translate(0,0) scale(1)}to{transform:translate(30px,40px) scale(1.08)}}
+
+  /* Grid overlay */
+  body::before{
+    content:'';
+    position:fixed;inset:0;
+    background-image:linear-gradient(rgba(59,130,246,.03) 1px,transparent 1px),
+                     linear-gradient(90deg,rgba(59,130,246,.03) 1px,transparent 1px);
+    background-size:48px 48px;
+    pointer-events:none;
+  }
+
+  .card{
+    position:relative;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:48px 44px;
+    width:100%;
+    max-width:440px;
+    box-shadow:var(--card-glow), 0 32px 64px rgba(0,0,0,.5);
+    animation:slideUp .6s cubic-bezier(.16,1,.3,1) both;
+  }
+  @keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+  .logo{
+    display:flex;align-items:center;gap:12px;
+    margin-bottom:36px;
+  }
+  .logo-icon{
+    width:44px;height:44px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    border-radius:12px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:22px;
+    box-shadow:0 0 24px rgba(59,130,246,.4);
+  }
+  .logo-text{
+    font-family:'Syne',sans-serif;
+    font-weight:800;font-size:1.15rem;
+    background:linear-gradient(135deg,#e2e8f0,#94a3b8);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+    letter-spacing:-.02em;
+  }
+  .logo-sub{font-size:.7rem;color:var(--muted);font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+
+  h1{
+    font-family:'Syne',sans-serif;font-weight:700;font-size:1.7rem;
+    letter-spacing:-.03em;margin-bottom:6px;
+  }
+  .subtitle{color:var(--muted);font-size:.9rem;margin-bottom:32px;font-weight:300}
+
+  /* Tabs */
+  .tabs{display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:28px;border:1px solid var(--border)}
+  .tab-btn{
+    flex:1;padding:9px;border:none;background:transparent;
+    color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;
+    border-radius:9px;cursor:pointer;transition:all .2s;
+  }
+  .tab-btn.active{background:var(--surface2);color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,.3)}
+
+  .form-group{margin-bottom:18px}
+  label{display:block;font-size:.8rem;font-weight:500;color:var(--muted);margin-bottom:7px;letter-spacing:.04em;text-transform:uppercase}
+  input{
+    width:100%;padding:13px 16px;
+    background:var(--bg);
+    border:1px solid var(--border);
+    border-radius:12px;
+    color:var(--text);
+    font-family:'DM Sans',sans-serif;font-size:.95rem;
+    transition:border-color .2s,box-shadow .2s;
+    outline:none;
+  }
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+  input::placeholder{color:#2d4060}
+
+  .btn{
+    width:100%;padding:14px;margin-top:8px;
+    background:linear-gradient(135deg,var(--accent),#2563eb);
+    border:none;border-radius:12px;
+    color:#fff;font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;
+    cursor:pointer;transition:all .2s;
+    box-shadow:0 4px 20px rgba(59,130,246,.35);
+    letter-spacing:.02em;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(59,130,246,.5)}
+  .btn:active{transform:translateY(0)}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+  .error-msg{
+    background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);
+    color:#fca5a5;border-radius:10px;padding:11px 14px;
+    font-size:.85rem;margin-top:14px;display:none;
+  }
+  .success-msg{
+    background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.25);
+    color:#6ee7b7;border-radius:10px;padding:11px 14px;
+    font-size:.85rem;margin-top:14px;display:none;
+  }
+
+  .divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:.8rem}
+  .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+  .stat-strip{
+    display:flex;gap:12px;margin-bottom:32px;
+  }
+  .stat-chip{
+    flex:1;background:var(--bg);border:1px solid var(--border);
+    border-radius:10px;padding:10px 12px;text-align:center;
+  }
+  .stat-chip .val{font-family:'Syne',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent)}
+  .stat-chip .lbl{font-size:.7rem;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.06em}
+
+  .panel{display:none}
+  .panel.active{display:block}
+</style>
+</head>
+<body>
+<div class="bg-blob b1"></div>
+<div class="bg-blob b2"></div>
+<div class="bg-blob b3"></div>
+
+<div class="card">
+  <div class="logo">
+    <div class="logo-icon">💸</div>
+    <div>
+      <div class="logo-text">ExpenseIQ</div>
+      <div class="logo-sub">Smart Expense Tracker</div>
+    </div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat-chip"><div class="val">100%</div><div class="lbl">Secure</div></div>
+    <div class="stat-chip"><div class="val">JSON</div><div class="lbl">Storage</div></div>
+    <div class="stat-chip"><div class="val">JWT</div><div class="lbl">Auth</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('login')">Sign In</button>
+    <button class="tab-btn" onclick="switchTab('register')">Create Account</button>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="panel-login" class="panel active">
+    <div class="form-group">
+      <label>Username</label>
+      <input id="l-username" type="text" placeholder="Enter your username" autocomplete="username"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="l-password" type="password" placeholder="Enter your password" autocomplete="current-password"/>
+    </div>
+    <button class="btn" id="login-btn" onclick="doLogin()">Sign In →</button>
+    <div class="error-msg" id="login-error"></div>
+  </div>
+
+  <!-- REGISTER -->
+  <div id="panel-register" class="panel">
+    <div class="form-group">
+      <label>Full Name</label>
+      <input id="r-name" type="text" placeholder="Muhammad Mamoon"/>
+    </div>
+    <div class="form-group">
+      <label>Username</label>
+      <input id="r-username" type="text" placeholder="mamoon"/>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input id="r-email" type="email" placeholder="mamoon@example.com"/>
+    </div>
+    <div class="form-group">
+      <label>Password</label>
+      <input id="r-password" type="password" placeholder="Min. 6 characters"/>
+    </div>
+    <button class="btn" id="reg-btn" onclick="doRegister()">Create Account →</button>
+    <div class="error-msg" id="reg-error"></div>
+    <div class="success-msg" id="reg-success"></div>
+  </div>
+</div>
+
+<script>
+const API = '';
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', (i===0&&tab==='login')||(i===1&&tab==='register')));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+
+async function doLogin() {
+  const btn = document.getElementById('login-btn');
+  const err = document.getElementById('login-error');
+  const u = document.getElementById('l-username').value.trim();
+  const p = document.getElementById('l-password').value;
+  err.style.display = 'none';
+  if (!u || !p) { showErr(err, 'Please fill in all fields'); return; }
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  try {
+    const body = new URLSearchParams({ username: u, password: p });
+    const res = await fetch(API + '/api/auth/login', { method:'POST', body });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.detail || 'Login failed'); return; }
+    localStorage.setItem('token', data.access_token);
+    localStorage.setItem('user', JSON.stringify({ id: data.user_id, username: data.username }));
+    window.location.href = '/app';
+  } catch(e) {
+    showErr(err, 'Cannot connect to server. Is it running?');
+  } finally { btn.disabled = false; btn.textContent = 'Sign In →'; }
+}
+
+async function doRegister() {
+  const btn = document.getElementById('reg-btn');
+  const err = document.getElementById('reg-error');
+  const suc = document.getElementById('reg-success');
+  err.style.display = 'none'; suc.style.display = 'none';
+  const payload = {
+    full_name: document.getElementById('r-name').value.trim(),
+    username: document.getElementById('r-username').value.trim(),
+    email: document.getElementById('r-email').value.trim(),
+    password: document.getElementById('r-password').value,
+  };
+  if (!payload.full_name||!payload.username||!payload.email||!payload.password) { showErr(err,'Please fill in all fields'); return; }
+  btn.disabled = true; btn.textContent = 'Creating…';
+  try {
+    const res = await fetch(API + '/api/auth/register', {
+      method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!res.ok) { showErr(err, data.detail || 'Registration failed'); return; }
+    suc.textContent = '✓ Account created! Signing you in…'; suc.style.display = 'block';
+    // auto-login
+    setTimeout(async () => {
+      const r2 = await fetch(API+'/api/auth/login',{method:'POST',body:new URLSearchParams({username:payload.username,password:payload.password})});
+      const d2 = await r2.json();
+      localStorage.setItem('token', d2.access_token);
+      localStorage.setItem('user', JSON.stringify({id:d2.user_id,username:d2.username}));
+      window.location.href = '/app';
+    }, 900);
+  } catch(e) {
+    showErr(err, 'Cannot connect to server. Is it running?');
+  } finally { btn.disabled=false; btn.textContent='Create Account →'; }
+}
+
+function showErr(el, msg) { el.textContent = msg; el.style.display = 'block'; }
+
+// Enter key
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const active = document.querySelector('.panel.active').id;
+    active === 'panel-login' ? doLogin() : doRegister();
+  }
+});
+
+// Redirect if already logged in
+if (localStorage.getItem('token')) window.location.href = '/app';
+</script>
+</body>
+</html>
